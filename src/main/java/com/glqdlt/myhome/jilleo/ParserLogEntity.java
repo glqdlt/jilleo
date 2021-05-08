@@ -78,4 +78,35 @@ public class ParserLogEntity {
     public void setParserAttirubteList(List<ParserAttirubte> parserAttirubteList) {
         this.parserAttirubteList = parserAttirubteList;
     }
+
+    public void comapreToUpdated(ParserLogEntity source){
+
+        String message = "";
+
+        switch (this.getSoldOut().compareTo(source.getSoldOut())){
+            case -1:
+                message += "재입고 되었습니다. ";
+                break;
+            case 1:
+                message += "품절 상태가 되었습니다. ";
+                break;
+            default:
+                break;
+        }
+
+        switch (this.getPrice().compareTo(source.getPrice())){
+            case -1:
+                message += String.format("가격이 %s 에서 %s 만큼 가격이 하강 했습니다. ",source.getPrice(), source.getPrice() - this.getPrice());
+                break;
+            case 1:
+                message += String.format("가격이 %s 에서 %s 만큼 가격이 상승 했습니다. ",source.getPrice(), this.getPrice()- source.getPrice() );
+                break;
+            default:
+                break;
+        }
+
+        if(message.length() != 0){
+            throw new UpdatePriceException(message,source,this);
+        }
+    }
 }
