@@ -100,10 +100,10 @@ public class ParserLogEntity {
 
         switch (this.getPrice().compareTo(source.getPrice())){
             case -1:
-                message += String.format("가격이 %s 에서 %s 만큼 가격이 하강 했습니다!! ",source.getPrice(), source.getPrice() - this.getPrice());
+                message += String.format("가격이 %s 만큼 떨어져서(down) 현재 %s 입니다. ",source.getPrice() - this.getPrice(), this.getPrice());
                 break;
             case 1:
-                message += String.format("가격이 %s 에서 %s 만큼 가격이 상승 했습니다. ",source.getPrice(), this.getPrice()- source.getPrice() );
+                message += String.format("가격이 %s 만큼 올라서(up) 현재 %s 입니다. ",this.getPrice()- source.getPrice(), this.getPrice());
                 break;
             default:
                 break;
