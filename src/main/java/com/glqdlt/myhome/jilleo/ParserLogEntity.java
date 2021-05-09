@@ -85,18 +85,22 @@ public class ParserLogEntity {
 
         switch (this.getSoldOut().compareTo(source.getSoldOut())){
             case -1:
-                message += "재입고 되었습니다. ";
+                message += "재입고 되었습니다!";
                 break;
             case 1:
                 message += "품절 상태가 되었습니다. ";
                 break;
+            case 0:
+                if(this.getSoldOut()){
+                    return;
+                }
             default:
                 break;
         }
 
         switch (this.getPrice().compareTo(source.getPrice())){
             case -1:
-                message += String.format("가격이 %s 에서 %s 만큼 가격이 하강 했습니다. ",source.getPrice(), source.getPrice() - this.getPrice());
+                message += String.format("가격이 %s 에서 %s 만큼 가격이 하강 했습니다!! ",source.getPrice(), source.getPrice() - this.getPrice());
                 break;
             case 1:
                 message += String.format("가격이 %s 에서 %s 만큼 가격이 상승 했습니다. ",source.getPrice(), this.getPrice()- source.getPrice() );
