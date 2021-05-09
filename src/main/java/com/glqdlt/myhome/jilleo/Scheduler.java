@@ -50,7 +50,7 @@ public class Scheduler {
         List<LowestPriceQueueEntity> entry = lowestPriceQueueEntityRepo.findAllBySubmitFalseOrderBySeqAsc();
         LOGGER.debug("size {}",entry.size());
         for(LowestPriceQueueEntity l : entry){
-            String message = String.format("**%s** 상품이 %s 시간에 %s'\n 바로가기 : %s \n",
+            String message = String.format("@here **%s** 상품이 %s 시간에 %s'\n 바로가기 : %s \n",
                     l.getCursor().getTitle(),
                     l.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                    l.getSummary(),
