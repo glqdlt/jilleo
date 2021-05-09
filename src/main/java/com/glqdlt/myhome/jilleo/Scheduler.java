@@ -5,10 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -38,6 +40,27 @@ public class Scheduler {
     private LowestPriceQueueEntityRepo lowestPriceQueueEntityRepo;
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+    @Autowired
+    private List<NotificationSender> notificationSenders;
+
+    @Scheduled(fixedDelay = 2000)
+    public void submitMessage() throws InterruptedException {
+        LOGGER.debug("submit message");
+        List<LowestPriceQueueEntity> entry = lowestPriceQueueEntityRepo.findAllBySubmitFalseOrderBySeqAsc();
+        LOGGER.debug("size {}",entry.size());
+        for(LowestPriceQueueEntity l : entry){
+            String message = String.format("**%s** 상품이 %s 시간에 %s'\n 바로가기 : %s \n",
+                    l.getCursor().getTitle(),
+                    l.getRegDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                   l.getSummary(),
+                    l.getUrlEntity().getUrl());
+            notificationSenders.stream().forEach(y -> y.submit(message));
+            l.setSubmit(true);
+            lowestPriceQueueEntityRepo.save(l);
+            Thread.sleep(TimeUnit.SECONDS.toMillis(1));
+        }
+    }
 
     @Scheduled(fixedDelay = 120000)
     public void schemedule(){

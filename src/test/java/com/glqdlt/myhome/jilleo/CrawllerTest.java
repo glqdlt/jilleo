@@ -1,6 +1,5 @@
 package com.glqdlt.myhome.jilleo;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +16,6 @@ class CrawllerTest {
         Assertions.assertEquals("10%",aaa);
     }
 
-    @Ignore
     @Test
     void name() {
 
